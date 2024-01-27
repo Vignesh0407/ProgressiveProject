@@ -1,19 +1,19 @@
 package com.wecp.progressive.entity;
+
 import java.util.Date;
 
-public class Transactions {
-
+public class Transactions 
+{
     private int transactionId;
     private int accountId;
     private double amount;
-    private String transactionType;
     private Date transactionDate;
+    private String transactionType;
 
-    public Transactions() {
-        //
-    }
+    public Transactions() {}
 
-    public Transactions(int transactionId, int accountId, double amount, Date timestamp, String transactionType) {
+    public Transactions(int transactionId, int accountId, double amount, Date timestamp, String transactionType) 
+    {
         this.transactionId = transactionId;
         this.accountId = accountId;
         this.amount = amount;
