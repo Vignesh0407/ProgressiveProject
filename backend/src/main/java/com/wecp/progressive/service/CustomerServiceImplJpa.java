@@ -1,68 +1,83 @@
 package com.wecp.progressive.service;
 
-import java.sql.SQLException;
+
+import com.wecp.progressive.entity.Customers;
+import com.wecp.progressive.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.wecp.progressive.entity.Customers;
-
 @Service
-public class CustomerServiceImplJpa implements CustomerService{
+public class CustomerServiceImplJpa implements CustomerService {
 
-    public List<Customers> list = new ArrayList<>();
+    private final CustomerRepository customerRepository;
 
+    @Autowired
+    public CustomerServiceImplJpa(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    private static List<Customers> customersList = new ArrayList<>();
     @Override
-    public List<Customers> getAllCustomers() throws SQLException {
-        return null;
+    public List<Customers> getAllCustomers() {
+        return customerRepository.findAll();
     }
 
     @Override
-    public Customers getCustomerById(int customerId) throws SQLException {
-        return null;
+    public Customers getCustomerById(int customerId) {
+        return customerRepository.findByCustomerId(customerId);
     }
 
     @Override
-    public int addCustomer(Customers customers) throws SQLException {
-        return -1;
+    public int addCustomer(Customers customers) {
+        return customerRepository.save(customers).getCustomerId();
     }
 
     @Override
-    public void updateCustomer(Customers customers) throws SQLException {
+    public void updateCustomer(Customers customers) {
+        customerRepository.save(customers);
     }
 
     @Override
-    public void deleteCustomer(int customerId) throws SQLException {
+    @Transactional
+    public void deleteCustomer(int customerId) {
+        customerRepository.deleteByCustomerId(customerId);
     }
 
     @Override
-    public List<Customers> getAllCustomersSortedByName() throws SQLException {
-        return null;
+    public List<Customers> getAllCustomersSortedByName() {
+        List<Customers> sortedCustomers = customerRepository.findAll();
+        Collections.sort(sortedCustomers);
+        return sortedCustomers;
     }
 
+
+
+    // The methods mentioned below have to be used for storing and manipulating data in an ArrayList.
     @Override
     public List<Customers> getAllCustomersFromArrayList() {
-        return list;
+        return customersList;
     }
 
     @Override
     public List<Customers> addCustomersToArrayList(Customers customers) {
-        list.add(customers);
-        return list;
+        customersList.add(customers);
+        return customersList;
     }
 
     @Override
     public List<Customers> getAllCustomersSortedByNameFromArrayList() {
-        List<Customers> sortedList = list;
-        Collections.sort(sortedList);
-        return sortedList;
+        List<Customers> sortedCustomers = customersList;
+        Collections.sort(sortedCustomers);
+        return sortedCustomers;
     }
 
     @Override
     public void emptyArrayList() {
-        list = new ArrayList<>();
+        customersList = new ArrayList<>();
     }
-    
 }
