@@ -2,6 +2,7 @@ package com.wecp.progressive.service;
 
 
 import com.wecp.progressive.entity.Customers;
+import com.wecp.progressive.exception.CustomerAlreadyExistsException;
 import com.wecp.progressive.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,6 +36,10 @@ public class CustomerServiceImplJpa implements CustomerService {
 
     @Override
     public int addCustomer(Customers customers) {
+        Customers customers1 = customerRepository.findByNameAndEmail(customers.getName(), customers.getEmail());
+        if (customers1 != null) {
+            throw new CustomerAlreadyExistsException("Customer already exists");
+        }
         return customerRepository.save(customers).getCustomerId();
     }
 
