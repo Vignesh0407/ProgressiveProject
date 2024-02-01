@@ -3,15 +3,15 @@ package com.wecp.progressive.service;
 
 import com.wecp.progressive.entity.Accounts;
 import com.wecp.progressive.repository.AccountRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class AccountServiceImplJpa implements  AccountService{
+public class AccountServiceImplJpa implements AccountService{
 
     private AccountRepository accountRepository;
     @Autowired
@@ -21,39 +21,42 @@ public class AccountServiceImplJpa implements  AccountService{
 
     @Override
     public List<Accounts> getAllAccounts() throws SQLException {
-        return null;
+        return accountRepository.findAll();
     }
 
     @Override
-    public List<Accounts> getAccountsByUser(int userId) throws SQLException {
-        return null;
+    public List<Accounts> getAccountsByUser(int customerId) throws SQLException {
+        return accountRepository.getAccountsByCustomerCustomerId(customerId);
     }
 
     @Override
-    public Accounts getAccountById(int accountId) throws SQLException {
-        return null;
+    public Accounts getAccountById(int accountId) {
+        return accountRepository.findById(accountId).orElse(null);
     }
 
     @Override
-    public int addAccount(Accounts accounts) throws SQLException {
-        return 0;
+    public int addAccount(Accounts accounts) {
+        return accountRepository.save(accounts).getAccountId();
     }
 
     @Override
-    public void updateAccount(Accounts accounts) throws SQLException {
-
+    public void updateAccount(Accounts accounts) {
+        accountRepository.save(accounts);
     }
 
     @Override
-    public void deleteAccount(int accountId) throws SQLException {
-
+    public void deleteAccount(int accountId) {
+        accountRepository.deleteById(accountId);
     }
 
     @Override
     public List<Accounts> getAllAccountsSortedByBalance() throws SQLException {
-        return null;
+        List<Accounts> sortedAccounts = getAllAccounts();
+        sortedAccounts.sort(Comparator.comparingDouble(Accounts::getBalance)); // Sort by account balance
+        return sortedAccounts;
     }
 
+    // Do not implement these methods
     @Override
     public List<Accounts> getAllAccountsFromArrayList() {
         return null;
