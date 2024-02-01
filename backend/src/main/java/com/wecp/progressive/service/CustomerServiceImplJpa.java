@@ -4,6 +4,7 @@ package com.wecp.progressive.service;
 import com.wecp.progressive.entity.Customers;
 import com.wecp.progressive.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class CustomerServiceImplJpa implements CustomerService {
 
     @Override
     @Transactional
+    @Modifying
     public void deleteCustomer(int customerId) {
         customerRepository.deleteByCustomerId(customerId);
     }
